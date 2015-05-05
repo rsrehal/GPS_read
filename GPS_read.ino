@@ -63,7 +63,7 @@ void wgs2utm(double latitude, double longitude)
   utm[0] = x;
   utm[1] = y;
   
-  Serial.println("I got here to UTM!!!");
+  //Serial.println("I got here to UTM!!!");
   
   
 }//wgs2utm
@@ -90,11 +90,12 @@ void loop()
     {
       displayInfo();
       
+      //Serial.println(gps.altitude.meters());
       
       wgs2utm(gps.location.lat(), gps.location.lng());
-      Serial.print('UTM Easting = ');
+      Serial.print("UTM Easting = ");
       Serial.println(utm[0]);
-      Serial.print('UTM Northing = ');
+      Serial.print("UTM Northing = ");
       Serial.println(utm[1]);
       
     }
