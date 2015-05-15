@@ -1,4 +1,4 @@
-#include <TinyGPS++.h>
+#include "TinyGPS++.h"
 #include <math.h>
 //#include <SoftwareSerial.h>
 /*
@@ -7,6 +7,8 @@
    4800-baud serial GPS device hooked up on pins 4(rx) and 3(tx).
    
    Modified to connect to RX1 (pin 19) and TX1 (pin18) of Arduino Mega
+   
+   Further modified to read RTK fix status using modified TinyGPS++ library
    
 */
 //static const int RXPin = 2, TXPin = 3;
@@ -90,7 +92,8 @@ void loop()
     {
       displayInfo();
       
-      //Serial.println(gps.altitude.meters());
+      //Serial.println(gps.altitude.meters());    //double
+      //Serial.println(gps.satellites.value());    //u32 (int)
       
       wgs2utm(gps.location.lat(), gps.location.lng());
       Serial.print("UTM Easting = ");
@@ -112,6 +115,18 @@ void loop()
 
 void displayInfo()
 {
+  // display RTK fix status variable from $GPGGA message
+  Serial.print(F("Fix Quality: ")); 
+  if (gps.fixQuality.isValid())
+  {
+    Serial.println(gps.fixQuality.value());
+  }
+  else
+  {
+    Serial.print(F("INVALID"));
+  }
+  
+  
   Serial.print(F("Location: ")); 
   if (gps.location.isValid())
   {
